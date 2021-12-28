@@ -23,7 +23,7 @@
     var parameterDefinition;
     var parameters;
 
-    fetch('http://localhost:8080/getPatterns', {
+    fetch('/getPatterns', {
         method: 'get'
     })
         .then(response => response.json())
@@ -50,7 +50,7 @@
     var setLength = function () {
 
         var a = document.querySelector('#length');
-        fetch('http://localhost:8080/setLength?length='+a.value, {
+        fetch('/setLength?length='+a.value, {
             method: 'post'
         })
             .then(response => response.json())
@@ -58,7 +58,7 @@
     };
 
     var getParameters = function () {
-        fetch('http://localhost:8080/getPatternParameters?patternCode='+selectedPattern, {
+        fetch('/getPatternParameters?patternCode='+selectedPattern, {
             method: 'get'
         })
             .then(response => response.json())
@@ -108,7 +108,7 @@
                     button.style.backgroundColor = 'rgb('+color.rgba[0]+','+color.rgba[1]+','+color.rgba[2]+')';
                     parameters[parameter.id] = rgbcode;
                     console.log(color.rgba);
-                    /*fetch('http://localhost:8080/setColors?colorCodes='+rgbcode, {
+                    /*fetch('/setColors?colorCodes='+rgbcode, {
                         method: 'post'
                     })
                         .then(response => response.json())
@@ -153,7 +153,7 @@
         }
 
 
-        fetch('http://localhost:8080/setPattern?patternCode='+selectedPattern+'&parameters='+valuesAsList, {
+        fetch('/setPattern?patternCode='+selectedPattern+'&parameters='+valuesAsList, {
             method: 'post'
         });
     }

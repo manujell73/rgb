@@ -1,16 +1,12 @@
 package com.manujell.rgb.patterns;
 
 import com.manujell.rgb.parameter.ColorParameter;
-import com.manujell.rgb.parameter.EnumParameter;
 import com.manujell.rgb.parameter.IntegerParameter;
 import com.manujell.rgb.parameter.Parameter;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class RainDropsPattern extends Pattern {
     private final Map<Integer, Long> rainDrops;
@@ -40,15 +36,17 @@ public class RainDropsPattern extends Pattern {
 
         Color[] colors = new Color[getLength()];
 
-        Iterator<Map.Entry<Integer, Long>> iter = rainDrops.entrySet().iterator();
-        while(iter.hasNext()) {
-            Map.Entry<Integer, Long> entry = iter.next();
-            float opacity = calcOpacity(entry.getValue(), now);
-            if(opacity <= 0) {
-                iter.remove();
-                continue;
+        synchronized (rainDrops) {
+            Iterator<Map.Entry<Integer, Long>> iter = rainDrops.entrySet().iterator();
+            while (iter.hasNext()) {
+                Map.Entry<Integer, Long> entry = iter.next();
+                float opacity = calcOpacity(now - entry.getValue());
+                if (opacity <= 0) {
+                    iter.remove();
+                    continue;
+                }
+                colors[entry.getKey()] = PatternUtils.calcColor(color, opacity);
             }
-            colors[entry.getKey()] = PatternUtils.calcColor(color, opacity);
         }
 
         for(int i=0; i<colors.length; i++) {
@@ -82,9 +80,11 @@ public class RainDropsPattern extends Pattern {
         long nDrops = calcNewDropsUpdateAnchor(now);
         dropsSinceAnchor += nDrops;
 
-        for(long i=0; i<nDrops; i++) {
-            int ind = rng.nextInt(getLength());
-            rainDrops.put(ind, now);
+        synchronized (rainDrops) {
+            for (long i = 0; i < nDrops; i++) {
+                int ind = rng.nextInt(getLength());
+                rainDrops.put(ind, now);
+            }
         }
     }
 
@@ -98,7 +98,7 @@ public class RainDropsPattern extends Pattern {
         return drops - dropsSinceAnchor;
     }
 
-    private float calcOpacity(long time, long now) {
-        return 1.0f - ((now - time) * dropDuration) / 1_000;
+    private float calcOpacity(long time) {
+        return Math.max(0, (dropDuration * 1_000 - time)/(dropDuration*1_000f));
     }
 }

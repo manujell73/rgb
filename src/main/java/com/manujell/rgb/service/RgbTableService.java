@@ -15,8 +15,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class RgbTableService {
-    private static final boolean LOCALLY = false;
-
     private static final int REFRESH_FREQUENCY = 30;
     private static final int REFRESH_TIME = 1000/REFRESH_FREQUENCY;
     public int stripLength = 64;
@@ -77,8 +75,8 @@ public class RgbTableService {
     }
 
     private Thread startLedStrip() {
-        if(!LOCALLY) {
-            Thread thread = new Thread(() -> {
+        Thread thread = new Thread(() -> {
+            try {
                 Ws281xLedStrip rgb = new Ws281xLedStrip(stripLength, 10, 800000, 10, 4, 0, false, LedStripType.WS2811_STRIP_GRB, true);
                 while (true) {
                     long start = (System.currentTimeMillis() / REFRESH_TIME) * REFRESH_TIME;
@@ -94,11 +92,13 @@ public class RgbTableService {
                         e.printStackTrace();
                     }
                 }
-            });
-            thread.start();
-            return thread;
-        }
-        Thread thread = new Thread(() -> {});
+            }
+            catch (Exception e){
+                while(true){
+                    getLedPattern().getCurrentColors();
+                }
+            }
+        });
         thread.start();
         return thread;
     }

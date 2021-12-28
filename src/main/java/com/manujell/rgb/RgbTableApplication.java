@@ -9,5 +9,4 @@ public class RgbTableApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(RgbTableApplication.class, args);
 	}
-
 }

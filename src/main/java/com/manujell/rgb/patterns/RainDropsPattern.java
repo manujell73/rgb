@@ -99,6 +99,9 @@ public class RainDropsPattern extends Pattern {
     }
 
     private float calcOpacity(long time) {
-        return Math.max(0, (dropDuration * 1_000 - time)/(dropDuration*1_000f));
+        float opacity = (dropDuration * 1_000f - time)/(dropDuration*1_000f);
+
+        if(opacity > 1f) return 1f;
+        return Math.max(opacity, 0f);
     }
 }

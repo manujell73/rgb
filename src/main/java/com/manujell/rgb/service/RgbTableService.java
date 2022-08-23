@@ -2,12 +2,16 @@ package com.manujell.rgb.service;
 
 import com.github.mbelling.ws281x.LedStripType;
 import com.github.mbelling.ws281x.Ws281xLedStrip;
+import com.manujell.rgb.ApplicationProperties;
 import com.manujell.rgb.color.decorators.DecoratorUtils;
+import com.manujell.rgb.dto.StripInfoDTO;
 import com.manujell.rgb.patterns.Pattern;
 import com.manujell.rgb.patterns.PatternUtils;
 import com.manujell.rgb.patterns.SingleColorPattern;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +26,16 @@ public class RgbTableService {
     private List<Color> colors;
     private Thread thread;
 
+    @Autowired
+    private ApplicationProperties applicationProperties;
+
     public RgbTableService() {
-        colors = new ArrayList<>();
+        colors = new ArrayList<>(stripLength);
         ledPattern = PatternUtils.getInstance(SingleColorPattern.class, stripLength, List.of(Color.BLACK.getRGB()));
+    }
+
+    @PostConstruct
+    private void postConstruct() {
         thread = startLedStrip();
     }
 
@@ -74,7 +85,14 @@ public class RgbTableService {
         System.out.println("Changed colors: " + colors.stream().mapToInt(Color::getRGB).map(a -> a&((1<<24) - 1)).mapToObj(a->String.format("%6x", a)).collect(Collectors.joining(" - ")));
     }
 
+    public StripInfoDTO getStripInfo() {
+        return new StripInfoDTO(getLedPattern().getCurrentColors());
+    }
+
     private Thread startLedStrip() {
+        if(applicationProperties.getIsTestEnv()) {
+            return null;
+        }
         Thread thread = new Thread(() -> {
             try {
                 Ws281xLedStrip rgb = new Ws281xLedStrip(stripLength, 10, 800000, 10, 4, 0, false, LedStripType.WS2811_STRIP_GRB, true);

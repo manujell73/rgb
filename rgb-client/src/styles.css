@@ -1,0 +1,16 @@
+/* You can add global styles to this file, and also import other style files */
+
+.flexDiv {
+    display:flex;
+    flex-wrap: wrap;
+}
+.input {
+    margin: 5px;
+}
+.colorTest {
+    background-color: black;
+}
+.colorTest>div {
+    height: 20px;
+    width: 20px;
+}

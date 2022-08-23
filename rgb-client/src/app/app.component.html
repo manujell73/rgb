@@ -1,0 +1,20 @@
+<div class="colorTest flexDiv"> 
+  <div *ngFor="let color of strip.colors" [ngStyle]="{'background-color': 'rgb('+color.r+', '+color.g+', '+color.b+')'}"></div>
+</div>
+
+<select class="input" [(ngModel)]="selectedPattern">
+  <option *ngFor="let pattern of patterns" value="{{pattern.id}}">{{pattern.name}}</option>
+</select>
+
+<div class="flexDiv">
+  <div class="input" *ngFor="let parameter of patterns[selectedPattern].parameters">
+    {{parameter.name}}
+    <br>
+    <input *ngIf="parameter.type === 'COLOR'" [(colorPicker)]="parameter.value" [style.background]="parameter.value"/>
+    <input *ngIf="parameter.type === 'NUMBER'" type="number" [(ngModel)]="parameter.value"/>
+    <select *ngIf="parameter.type === 'ENUM'" [(ngModel)]="parameter.value">
+      <option *ngFor="let enum of parameter.enums; let i = index" [attr.data-index]="i" value="{{i}}">{{enum}}</option>
+    </select>
+  </div>
+</div>
+<input class="input" type="button" value="Submit" (click)="submitPattern()"/>

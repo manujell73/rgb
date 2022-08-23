@@ -1,6 +1,8 @@
 package com.manujell.rgb.controller;
 
 import com.manujell.rgb.color.decorators.DecoratorUtils;
+import com.manujell.rgb.dto.PatternDTO;
+import com.manujell.rgb.dto.StripInfoDTO;
 import com.manujell.rgb.parameter.Parameter;
 import com.manujell.rgb.patterns.PatternUtils;
 import com.manujell.rgb.patterns.SingleColorPattern;
@@ -28,9 +30,14 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class RgbTableController {
 
     @Autowired
-    RgbTableService rgbTableService;
+    private RgbTableService rgbTableService;
 
     public RgbTableController() {
+    }
+
+    @RequestMapping(value="/getStripInfo", method = GET)
+    public StripInfoDTO getStripInfo() {
+        return rgbTableService.getStripInfo();
     }
 
     @RequestMapping(value="/setLength", method = POST)
@@ -48,14 +55,14 @@ public class RgbTableController {
         rgbTableService.setLedPattern(PatternUtils.patterns.get(patternCode), parameters);
     }
 
-    @RequestMapping(value="/getPatterns", method = GET)
-    public List<String> getPatterns() {
+    @RequestMapping(value="/getPatternsOld", method = GET)
+    public List<String> getPatternsOld() {
         return PatternUtils.patterns.stream().map(Class::getSimpleName).collect(Collectors.toList());
     }
 
-    @RequestMapping(value="/getPatternParameters", method = GET)
-    public Parameter[] getPatternParameters(@RequestParam int patternCode) {
-        return PatternUtils.getParametersOfPattern(patternCode);
+    @RequestMapping(value="/getPatterns", method = GET)
+    public List<PatternDTO> getPatterns() {
+        return PatternUtils.patterns.stream().map(PatternDTO::new).collect(Collectors.toList());
     }
 
     // For the future

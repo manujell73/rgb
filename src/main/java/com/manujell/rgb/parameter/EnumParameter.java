@@ -1,14 +1,14 @@
 package com.manujell.rgb.parameter;
 
 public class EnumParameter extends Parameter {
-    private final String[] values;
+    private final String[] enums;
 
-    public EnumParameter(String id, String name, String... values) {
+    public EnumParameter(String id, String name, String... enums) {
         super(id, name, ParameterType.ENUM);
-        this.values = values;
+        this.enums = enums;
     }
 
-    public String[] getValues() {
-        return values;
+    public String[] getEnums() {
+        return enums;
     }
 }

@@ -2,21 +2,21 @@ package com.manujell.rgb.parameter;
 
 public abstract class Parameter {
     private final String id;
-    private final ParameterType parameterType;
+    private final ParameterType type;
     private final String name;
 
-    public Parameter(String id, String name, ParameterType parameterType) {
+    public Parameter(String id, String name, ParameterType type) {
         this.id = id;
         this.name = name;
-        this.parameterType = parameterType;
+        this.type = type;
     }
 
     public String getId() {
         return id;
     }
 
-    public ParameterType getParameterType() {
-        return parameterType;
+    public ParameterType getType() {
+        return type;
     }
 
     public String getName() {

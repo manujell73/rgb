@@ -9,16 +9,14 @@ import java.awt.Color;
 import java.util.List;
 import java.util.function.Function;
 
-public class NightRiderPattern extends Pattern {
-    private Color color;
+public class NightRiderPattern extends SingleColorPattern {
     private final int speed; // Umdrehungen / Minute
     private final int lineLength;
     private final int dir;
     private long anchor;
 
     public NightRiderPattern(int length, Color color, int speed, int lineLength, int dir) {
-        super(length);
-        this.color = color;
+        super(length, color);
         this.speed = speed;
         this.lineLength = lineLength;
         this.dir = dir;

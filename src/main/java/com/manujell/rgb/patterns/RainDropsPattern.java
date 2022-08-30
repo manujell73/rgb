@@ -9,9 +9,8 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 
-public class RainDropsPattern extends Pattern {
+public class RainDropsPattern extends SingleColorPattern {
     private final Map<Integer, Long> rainDrops;
-    private Color color;
     private final int dropsPerMinute;
     private final float dropDuration;
     private final Random rng;
@@ -19,13 +18,12 @@ public class RainDropsPattern extends Pattern {
     private int dropsSinceAnchor;
 
     public RainDropsPattern(int length, Color color, int dropsPerMinute, float dropDuration) {
-        super(length);
+        super(length, color);
         this.rainDrops = new HashMap<>();
         this.anchor = System.currentTimeMillis();
         this.dropsSinceAnchor = 0;
         this.rng = new Random();
 
-        this.color = color;
         this.dropDuration = dropDuration;
         this.dropsPerMinute = dropsPerMinute;
     }

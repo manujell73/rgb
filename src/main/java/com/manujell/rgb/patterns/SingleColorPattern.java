@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SingleColorPattern extends Pattern {
-    private Color color;
+    protected Color color;
 
     public SingleColorPattern(int length, Color color) {
         super(length);

@@ -7,6 +7,7 @@ import com.manujell.rgb.parameter.Parameter;
 
 import java.awt.Color;
 import java.util.List;
+import java.util.function.Function;
 
 public class NightRiderPattern extends Pattern {
     private Color color;
@@ -31,7 +32,7 @@ public class NightRiderPattern extends Pattern {
 
         for(int i=0; i<lineLength; i++) {
             float opacity = (lineLength - i) / (float) lineLength;
-            int subInd = PatternUtils.calcIndex(ind, dir < 0 ? i : -i, getLength());
+            int subInd = PatternUtils.calcIndex(ind, dir > 0 ? i : -i, getLength());
             colors[subInd] = PatternUtils.calcColor(color, opacity);
         }
 
@@ -52,6 +53,11 @@ public class NightRiderPattern extends Pattern {
         this.color = colors.get(0);
     }
 
+    @Override
+    public void applyDecorator(Function<Color, Color> function) {
+        color = function.apply(color);
+    }
+
     public static Parameter[] getParameters() {
         Parameter[] parameters = new Parameter[4];
 
@@ -69,7 +75,7 @@ public class NightRiderPattern extends Pattern {
         anchor %= 60_000L;
 
         int offset = (time * getLength() * speed) / 60_000;
-        if(dir < 0)
+        if(dir > 0)
             offset*=-1;
 
         return PatternUtils.calcIndex(0, offset, getLength());

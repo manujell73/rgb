@@ -2,7 +2,7 @@ package com.manujell.rgb.color.decorators;
 
 import java.awt.*;
 
-public class TransitionDecorator2 extends Color {
+public class TransitionDecorator2 extends Color implements ColorDecorator {
     private final Color[] colors;
     private final long speed;
     private long anchor;

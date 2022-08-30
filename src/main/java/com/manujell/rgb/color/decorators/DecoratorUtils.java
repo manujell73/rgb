@@ -1,10 +1,13 @@
 package com.manujell.rgb.color.decorators;
 
+import com.manujell.rgb.parameter.Parameter;
+
 import java.awt.*;
 import java.util.List;
+import java.util.function.Function;
 
 public class DecoratorUtils {
-    public static final List<Class> colorDecorators = List.of(BreathingDecorator.class, BrightnessDecorator.class, TransitionDecorator.class);
+    public static final List<Class<? extends ColorDecorator>> colorDecorators = List.of(BreathingDecorator.class, BrightnessDecorator.class, TransitionDecorator.class);
 
     public static int calcRGB(int rgb, float opacity) {
         int red = Math.round(((rgb>>16) & 255) * opacity);
@@ -25,13 +28,38 @@ public class DecoratorUtils {
         return (red << 16) | (green << 8) | blue;
     }
 
-    public static Color getInstance(Class clazz, Color color, int parameter) {
+    public static Function<Color, Color> getDecoratorFunction(Class<? extends ColorDecorator> clazz, List<Integer> parameter) {
         if(clazz == BreathingDecorator.class) {
-            return new BreathingDecorator(color, parameter);
+            return color -> new BreathingDecorator(color, parameter.get(0));
         }
         if(clazz == BrightnessDecorator.class){
-            return new BrightnessDecorator(color, parameter);
+            return color -> new BrightnessDecorator(color, parameter.get(0));
         }
-        return color;
+        if(clazz == TransitionDecorator.class){
+            return color -> new TransitionDecorator(color, new Color(parameter.get(0)), parameter.get(1));
+        }
+        return color -> color;
+    }
+
+    // Please don't ask why
+    public static Parameter[] getParametersOfDecorator(int decoratorCode){
+        Class<? extends ColorDecorator> decoratorClass = colorDecorators.get(decoratorCode);
+        if(decoratorClass == BreathingDecorator.class) {
+            return BreathingDecorator.getParameters();
+        }
+        else if(decoratorClass == BrightnessDecorator.class) {
+            return BrightnessDecorator.getParameters();
+        }
+        else if(decoratorClass == TransitionDecorator.class) {
+            return TransitionDecorator.getParameters();
+        }
+        return new Parameter[0];
+    }
+
+    public static Class<? extends ColorDecorator> getDecoratorByName(String name) {
+        return colorDecorators.stream()
+                .filter(clazz -> clazz.getSimpleName().equals(name))
+                .findAny()
+                .orElseThrow(IllegalArgumentException::new);
     }
 }

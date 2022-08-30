@@ -3,6 +3,7 @@ package com.manujell.rgb.service;
 import com.github.mbelling.ws281x.LedStripType;
 import com.github.mbelling.ws281x.Ws281xLedStrip;
 import com.manujell.rgb.ApplicationProperties;
+import com.manujell.rgb.color.decorators.ColorDecorator;
 import com.manujell.rgb.color.decorators.DecoratorUtils;
 import com.manujell.rgb.dto.StripInfoDTO;
 import com.manujell.rgb.patterns.Pattern;
@@ -23,14 +24,12 @@ public class RgbTableService {
     private static final int REFRESH_TIME = 1000/REFRESH_FREQUENCY;
     public int stripLength = 64;
     private Pattern ledPattern;
-    private List<Color> colors;
     private Thread thread;
 
     @Autowired
     private ApplicationProperties applicationProperties;
 
     public RgbTableService() {
-        colors = new ArrayList<>(stripLength);
         ledPattern = PatternUtils.getInstance(SingleColorPattern.class, stripLength, List.of(Color.BLACK.getRGB()));
     }
 
@@ -53,7 +52,7 @@ public class RgbTableService {
         return ledPattern;
     }
 
-    public void setLedPattern(Class patternClass, List<Integer> parameters) {
+    public void setLedPattern(Class<? extends Pattern> patternClass, List<Integer> parameters) {
         setLedPattern(PatternUtils.getInstance(patternClass, stripLength, parameters));
     }
 
@@ -62,27 +61,12 @@ public class RgbTableService {
         System.out.println("Changed Pattern: " + ledPattern.getClass().getSimpleName());
     }
 
-    public void addColorDecorator(Class decoratorClass, int parameter) {
-        colors.set(0, DecoratorUtils.getInstance(decoratorClass, colors.get(0), parameter));
-        ledPattern.setColors(colors);
+    public void addColorDecorator(Class<? extends ColorDecorator> decoratorClass, List<Integer> parameter) {
+        ledPattern.applyDecorator(DecoratorUtils.getDecoratorFunction(decoratorClass, parameter));
     }
 
     public RgbTableService(Pattern ledPattern) {
         this.ledPattern = ledPattern;
-    }
-
-    public void setColors(List<Color> newColors) {
-        if(newColors.isEmpty()) {
-            return;
-        }
-        for(int i=0; i<newColors.size(); i++) {
-            if(colors.size()<=i)
-                colors.add(newColors.get(i));
-            else
-                colors.set(i, newColors.get(i));
-        }
-        ledPattern.setColors(colors);
-        System.out.println("Changed colors: " + colors.stream().mapToInt(Color::getRGB).map(a -> a&((1<<24) - 1)).mapToObj(a->String.format("%6x", a)).collect(Collectors.joining(" - ")));
     }
 
     public StripInfoDTO getStripInfo() {

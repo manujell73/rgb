@@ -59,4 +59,11 @@ public class PatternUtils {
         }
         return new Parameter[0];
     }
+
+    public static Class<? extends Pattern> getPatternByName(String name) {
+        return patterns.stream()
+                .filter(pattern -> pattern.getSimpleName().equals(name))
+                .findAny()
+                .orElseThrow(IllegalArgumentException::new);
+    }
 }

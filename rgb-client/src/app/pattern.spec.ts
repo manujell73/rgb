@@ -1,7 +1,7 @@
-import { Pattern } from './pattern';
+import { PatternList } from './pattern';
 
 describe('Pattern', () => {
   it('should create an instance', () => {
-    expect(new Pattern()).toBeTruthy();
+    expect(new PatternList()).toBeTruthy();
   });
 });

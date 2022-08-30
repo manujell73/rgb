@@ -3,18 +3,35 @@
 </div>
 
 <select class="input" [(ngModel)]="selectedPattern">
-  <option *ngFor="let pattern of patterns" value="{{pattern.id}}">{{pattern.name}}</option>
+  <option *ngFor="let entry of patterns | keyvalue" value="{{entry.key}}">{{entry.key}}</option>
 </select>
-
 <div class="flexDiv">
-  <div class="input" *ngFor="let parameter of patterns[selectedPattern].parameters">
+  <div class="input" *ngFor="let parameter of patterns[selectedPattern||'']">
     {{parameter.name}}
     <br>
-    <input *ngIf="parameter.type === 'COLOR'" [(colorPicker)]="parameter.value" [style.background]="parameter.value"/>
-    <input *ngIf="parameter.type === 'NUMBER'" type="number" [(ngModel)]="parameter.value"/>
-    <select *ngIf="parameter.type === 'ENUM'" [(ngModel)]="parameter.value">
+    <input *ngIf="parameter.type === 'COLOR'" [(colorPicker)]="parameter.value" [style.background]="parameter.value" (change)="parameterChanged()"/>
+    <input *ngIf="parameter.type === 'NUMBER'" type="number" [(ngModel)]="parameter.value" (change)="parameterChanged()"/>
+    <select *ngIf="parameter.type === 'ENUM'" [(ngModel)]="parameter.value" (change)="parameterChanged()">
       <option *ngFor="let enum of parameter.enums; let i = index" [attr.data-index]="i" value="{{i}}">{{enum}}</option>
     </select>
   </div>
 </div>
 <input class="input" type="button" value="Submit" (click)="submitPattern()"/>
+
+<br>
+
+<select class="input" [(ngModel)]="selectedDecorator">
+  <option *ngFor="let entry of decorators | keyvalue" value="{{entry.key}}">{{entry.key}}</option>
+</select>
+<div class="flexDiv">
+  <div class="input" *ngFor="let parameter of decorators[selectedDecorator||'']">
+    {{parameter.name}}
+    <br>
+    <input *ngIf="parameter.type === 'COLOR'" [(colorPicker)]="parameter.value" [style.background]="parameter.value" (change)="parameterChanged()"/>
+    <input *ngIf="parameter.type === 'NUMBER'" type="number" [(ngModel)]="parameter.value" (change)="parameterChanged()"/>
+    <select *ngIf="parameter.type === 'ENUM'" [(ngModel)]="parameter.value" (change)="parameterChanged()">
+      <option *ngFor="let enum of parameter.enums; let i = index" [attr.data-index]="i" value="{{i}}">{{enum}}</option>
+    </select>
+  </div>
+</div>
+<input class="input" type="button" value="Submit" (click)="submitDecorator()"/>

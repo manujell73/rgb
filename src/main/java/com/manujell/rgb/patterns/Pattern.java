@@ -1,7 +1,9 @@
 package com.manujell.rgb.patterns;
 
-import java.awt.Color;
+
+import java.awt.*;
 import java.util.List;
+import java.util.function.Function;
 
 public abstract class Pattern {
     private int length;
@@ -12,6 +14,7 @@ public abstract class Pattern {
 
     public abstract Color[] getCurrentColors();
     public abstract void setColors(List<Color> colors);
+    public abstract void applyDecorator(Function<Color, Color> function);
 
     public int getLength() {
         return length;

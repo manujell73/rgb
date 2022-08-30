@@ -3,30 +3,36 @@ package com.manujell.rgb.patterns;
 import com.manujell.rgb.parameter.ColorParameter;
 import com.manujell.rgb.parameter.IntegerParameter;
 import com.manujell.rgb.parameter.Parameter;
+import java.util.function.Function;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TransitionPattern extends Pattern {
-    private Color color1;
-    private final int offset1;
-    private Color color2;
-    private final int offset2;
+    private final List<ColorPair> colorPairs;
+
+    public TransitionPattern(int length, List<Color> colors, List<Integer> offsets) {
+        super(length);
+        if(colors.size() != offsets.size())
+            throw new IllegalArgumentException("Colors and offsets must be equal size.");
+        if(colors.size() <= 1)
+            throw new IllegalArgumentException("Needs at least two colors.");
+
+        colorPairs = new ArrayList<>();
+        for(int i=0; i<colors.size(); i++) {
+            colorPairs.add(new ColorPair(colors.get(i), offsets.get(i)));
+        }
+        Collections.sort(colorPairs);
+    }
 
     public TransitionPattern(int length, Color color1, int offset1, Color color2, int offset2) {
-        super(length);
-        this.color1 = color1;
-        this.offset1 = offset1;
-        this.color2 = color2;
-        this.offset2 = offset2;
+        this(length, List.of(color1, color2), List.of(offset1, offset2));
     }
 
     public TransitionPattern(int length, Color color1, float offset1, Color color2, float offset2) {
-        super(length);
-        this.color1 = color1;
-        this.offset1 = Math.round(offset1 * length);
-        this.color2 = color2;
-        this.offset2 = Math.round(offset2 * length);
+        this(length, color1, Math.round(offset1 * length), color2, Math.round(offset2 * length));
     }
 
     @Override
@@ -34,18 +40,19 @@ public class TransitionPattern extends Pattern {
         Color[] colors = new Color[getLength()];
 
         for(int i=0; i<colors.length; i++) {
-            colors[i] = calcColorAtIndex(i);
+            colors[i] = calcColorAtIndexNew(i);
         }
         return colors;
     }
 
     @Override
     public void setColors(List<Color> colors) {
-        if(colors == null || colors.size() <= 1) {
-            throw new IllegalArgumentException("There must be two colors.");
-        }
-        this.color1 = colors.get(0);
-        this.color2 = colors.get(1);
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void applyDecorator(Function<Color, Color> function) {
+        colorPairs.forEach(pair -> pair.color = function.apply(pair.color));
     }
 
     public static Parameter[] getParameters() {
@@ -59,9 +66,9 @@ public class TransitionPattern extends Pattern {
         return parameters;
     }
 
-    private Color calcColorAtIndex(int ind) {
-        int anchorDiff = PatternUtils.calcIndex(offset1, -offset2, getLength());
-        int diff = PatternUtils.calcIndex(ind, -offset2, getLength());
+    private Color calcColorAtIndex(int ind, ColorPair pair2, ColorPair pair1) {
+        int anchorDiff = PatternUtils.calcIndex(pair1.offset, -pair2.offset, getLength());
+        int diff = PatternUtils.calcIndex(ind, -pair2.offset, getLength());
 
         if(anchorDiff < diff) {
             anchorDiff = getLength() - anchorDiff;
@@ -71,6 +78,31 @@ public class TransitionPattern extends Pattern {
         double opacity1 = diff / (double) anchorDiff;
         double opacity2 = 1.0d - opacity1;
 
-        return PatternUtils.calcColor(color1, opacity1, color2, opacity2);
+        return PatternUtils.calcColor(pair1.color, opacity1, pair2.color, opacity2);
+    }
+
+    private Color calcColorAtIndexNew(int ind) {
+        ColorPair lowerColor = colorPairs.get(colorPairs.size()-1);
+        ColorPair higherColor = colorPairs.get(0);
+        for(int i=1; ind > higherColor.offset && i <= colorPairs.size(); i++) {
+            lowerColor = higherColor;
+            higherColor = colorPairs.get(i%colorPairs.size());
+        }
+        return calcColorAtIndex(ind, lowerColor, higherColor);
+    }
+
+    private static class ColorPair implements Comparable<ColorPair> {
+        private Color color;
+        private final int offset;
+
+        public ColorPair(Color color, int offset) {
+            this.color = color;
+            this.offset = offset;
+        }
+
+        @Override
+        public int compareTo(ColorPair o) {
+            return Integer.compare(offset, o.offset);
+        }
     }
 }

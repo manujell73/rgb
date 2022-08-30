@@ -3,6 +3,7 @@ package com.manujell.rgb.patterns;
 import com.manujell.rgb.parameter.ColorParameter;
 import com.manujell.rgb.parameter.IntegerParameter;
 import com.manujell.rgb.parameter.Parameter;
+import java.util.function.Function;
 
 import java.awt.*;
 import java.util.List;
@@ -64,6 +65,11 @@ public class RainDropsPattern extends Pattern {
             throw new IllegalArgumentException("There must be a color.");
         }
         this.color = colors.get(0);
+    }
+
+    @Override
+    public void applyDecorator(Function<Color, Color> function) {
+        color = function.apply(color);
     }
 
     public static Parameter[] getParameters() {

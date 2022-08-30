@@ -1,7 +1,5 @@
-export class Pattern {
-    id!: number;
-    name!: string;
-    parameters!: Parameter[];
+export class PatternList {
+    [key: string]: Parameter[];
 }
 
 export class Parameter {

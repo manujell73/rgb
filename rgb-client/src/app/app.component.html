@@ -1,5 +1,5 @@
 <div class="colorTest flexDiv"> 
-  <div *ngFor="let color of strip.colors" [ngStyle]="{'background-color': 'rgb('+color.r+', '+color.g+', '+color.b+')'}"></div>
+  <div *ngFor="let color of strip.colors" [ngStyle]="{'background-color': 'rgb('+color.r+', '+color.g+', '+color.b+')', 'width': 'calc(100%/'+strip.length+')'}"></div>
 </div>
 
 <select class="input" [(ngModel)]="selectedPattern">

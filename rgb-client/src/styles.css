@@ -9,7 +9,8 @@
 }
 .colorTest {
     background-color: gray;
-    padding: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 .colorTest>div {
     height: 1.5rem;

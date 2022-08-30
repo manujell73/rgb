@@ -4,6 +4,7 @@ import com.manujell.rgb.parameter.ColorParameter;
 import com.manujell.rgb.parameter.EnumParameter;
 import com.manujell.rgb.parameter.IntegerParameter;
 import com.manujell.rgb.parameter.Parameter;
+import com.manujell.rgb.utility.PatternUtils;
 
 import java.awt.Color;
 import java.util.List;

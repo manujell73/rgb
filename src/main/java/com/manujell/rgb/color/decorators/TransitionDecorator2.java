@@ -1,5 +1,7 @@
 package com.manujell.rgb.color.decorators;
 
+import com.manujell.rgb.utility.DecoratorUtils;
+
 import java.awt.*;
 
 public class TransitionDecorator2 extends Color implements ColorDecorator {

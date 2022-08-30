@@ -3,6 +3,7 @@ package com.manujell.rgb.color.decorators;
 import com.manujell.rgb.parameter.ColorParameter;
 import com.manujell.rgb.parameter.IntegerParameter;
 import com.manujell.rgb.parameter.Parameter;
+import com.manujell.rgb.utility.DecoratorUtils;
 
 import java.awt.*;
 

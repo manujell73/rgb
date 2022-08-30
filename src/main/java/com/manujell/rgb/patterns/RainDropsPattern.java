@@ -3,6 +3,8 @@ package com.manujell.rgb.patterns;
 import com.manujell.rgb.parameter.ColorParameter;
 import com.manujell.rgb.parameter.IntegerParameter;
 import com.manujell.rgb.parameter.Parameter;
+import com.manujell.rgb.utility.PatternUtils;
+
 import java.util.function.Function;
 
 import java.awt.*;

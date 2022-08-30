@@ -4,19 +4,17 @@ import com.github.mbelling.ws281x.LedStripType;
 import com.github.mbelling.ws281x.Ws281xLedStrip;
 import com.manujell.rgb.ApplicationProperties;
 import com.manujell.rgb.color.decorators.ColorDecorator;
-import com.manujell.rgb.color.decorators.DecoratorUtils;
+import com.manujell.rgb.utility.DecoratorUtils;
 import com.manujell.rgb.dto.StripInfoDTO;
 import com.manujell.rgb.patterns.Pattern;
-import com.manujell.rgb.patterns.PatternUtils;
+import com.manujell.rgb.utility.PatternUtils;
 import com.manujell.rgb.patterns.SingleColorPattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class RgbTableService {

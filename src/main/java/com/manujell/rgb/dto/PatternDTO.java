@@ -1,10 +1,10 @@
 package com.manujell.rgb.dto;
 
 import com.manujell.rgb.color.decorators.ColorDecorator;
-import com.manujell.rgb.color.decorators.DecoratorUtils;
+import com.manujell.rgb.utility.DecoratorUtils;
 import com.manujell.rgb.parameter.Parameter;
 import com.manujell.rgb.patterns.Pattern;
-import com.manujell.rgb.patterns.PatternUtils;
+import com.manujell.rgb.utility.PatternUtils;
 
 public class PatternDTO {
     private final int id;

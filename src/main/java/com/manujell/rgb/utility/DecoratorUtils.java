@@ -1,5 +1,9 @@
-package com.manujell.rgb.color.decorators;
+package com.manujell.rgb.utility;
 
+import com.manujell.rgb.color.decorators.BreathingDecorator;
+import com.manujell.rgb.color.decorators.BrightnessDecorator;
+import com.manujell.rgb.color.decorators.ColorDecorator;
+import com.manujell.rgb.color.decorators.TransitionDecorator;
 import com.manujell.rgb.parameter.Parameter;
 
 import java.awt.*;

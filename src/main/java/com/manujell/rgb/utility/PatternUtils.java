@@ -1,6 +1,7 @@
-package com.manujell.rgb.patterns;
+package com.manujell.rgb.utility;
 
 import com.manujell.rgb.parameter.Parameter;
+import com.manujell.rgb.patterns.*;
 
 import java.awt.*;
 import java.util.List;

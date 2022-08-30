@@ -1,24 +1,19 @@
 package com.manujell.rgb.controller;
 
-import com.manujell.rgb.color.decorators.DecoratorUtils;
+import com.manujell.rgb.utility.DecoratorUtils;
 import com.manujell.rgb.dto.PatternDTO;
 import com.manujell.rgb.dto.StripInfoDTO;
 import com.manujell.rgb.parameter.Parameter;
-import com.manujell.rgb.patterns.PatternUtils;
+import com.manujell.rgb.utility.PatternUtils;
 import com.manujell.rgb.patterns.SingleColorPattern;
 import com.manujell.rgb.service.RgbTableService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;

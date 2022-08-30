@@ -9,7 +9,7 @@ public class BreathingDecorator extends TransitionDecorator implements ColorDeco
     private final static String ID_PREFIX = "breathing.parameter.";
 
     public BreathingDecorator(Color next, long speed) {
-        super(Color.BLACK, next, speed);
+        super(next, Color.BLACK, speed);
     }
 
     public static Parameter[] getParameters() {

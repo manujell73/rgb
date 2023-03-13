@@ -45,4 +45,9 @@ public class SingleColorPattern extends Pattern {
 
         return parameters;
     }
+
+    @Override
+    public boolean isContinuous() {
+        return false;
+    }
 }

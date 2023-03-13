@@ -52,13 +52,13 @@ public class RgbTableController {
     }
 
     @RequestMapping(value="/getPatterns", method = GET)
-    public Map<String, Parameter[]> getPatternsNew() {
-        return PatternUtils.patterns.stream().map(PatternDTO::createInstanceFromPattern).collect(Collectors.toMap(PatternDTO::getName, PatternDTO::getParameters));
+    public Map<String, PatternDTO> getPatternsNew() {
+        return PatternUtils.patterns.stream().map(PatternDTO::createInstanceFromPattern).collect(Collectors.toMap(PatternDTO::getName, patternDTO -> patternDTO));
     }
 
     @RequestMapping(value="/getDecorators", method = GET)
-    public Map<String, Parameter[]> getDecoratorsNew() {
-        return DecoratorUtils.colorDecorators.stream().map(PatternDTO::createInstanceFromDecorator).collect(Collectors.toMap(PatternDTO::getName, PatternDTO::getParameters));
+    public Map<String, PatternDTO> getDecoratorsNew() {
+        return DecoratorUtils.colorDecorators.stream().map(PatternDTO::createInstanceFromDecorator).collect(Collectors.toMap(PatternDTO::getName, patternDTO -> patternDTO));
     }
 
     @RequestMapping(value="/setDecorator", method = POST)

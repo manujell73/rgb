@@ -51,7 +51,7 @@ export class StripServiceService {
 
   private submit(patternList:PatternList, patternName:string, requestUrl:string): Observable<Strip> {
     let patternParams:(string|number)[] = [];
-    let parameters:Parameter[] = patternList[patternName];
+    let parameters:Parameter[] = patternList[patternName].parameters;
     for(let i =0; i < parameters.length; i++){
       let value;
       if(parameters[i].type === 'COLOR')

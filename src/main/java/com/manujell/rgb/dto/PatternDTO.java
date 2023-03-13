@@ -34,6 +34,9 @@ public class PatternDTO {
         String name = patternClass.getSimpleName();
         Parameter[] parameters = PatternUtils.getParametersOfPattern(id);
 
+        // TODO: Continue with whatever this should have been
+        // patternClass.method
+
         return new PatternDTO(id, name, parameters);
     }
 

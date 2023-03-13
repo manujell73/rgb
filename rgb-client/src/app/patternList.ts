@@ -1,5 +1,5 @@
 export class PatternList {
-    [key: string]: Parameter[];
+    [key: string]: Pattern;
 }
 
 export class Parameter {
@@ -10,4 +10,10 @@ export class Parameter {
     minValue: number | undefined;
     maxValue: number | undefined;
     enums: string[] | undefined;
+}
+
+export class Pattern {
+    id!: number;
+    continuous?: boolean | undefined;
+    parameters!: Parameter[];
 }

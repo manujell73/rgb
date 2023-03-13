@@ -110,4 +110,9 @@ public class RainDropsPattern extends SingleColorPattern {
         if(opacity > 1f) return 1f;
         return Math.max(opacity, 0f);
     }
+
+    @Override
+    public boolean isContinuous() {
+        return true;
+    }
 }

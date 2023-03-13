@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { interval } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 import { PatternList } from './patternList';
 import { Strip } from './strip';
 import { StripServiceService } from './strip-service.service';
@@ -11,42 +11,42 @@ import { StripServiceService } from './strip-service.service';
 })
 export class AppComponent {
   title: string = 'rgb-client';
-  strip!: Strip;
+  strip: Strip | undefined;
   color: string = '#FF0000';
   patterns: PatternList = {};
   decorators: PatternList = {};
-  selectedPattern: string|null = null;
-  selectedDecorator: string|null = null;
+  selectedPattern: string = '';
+  selectedDecorator: string = '';
+
+  subscription?: Subscription|undefined;
+
 
   constructor(private stripService: StripServiceService) {
-    interval(33).subscribe(() => this.resetStrip());
+  }
+
+  private startNewSubscription() {
+    this.subscription = interval(33).subscribe(() => this.resetStrip());
   }
 
   ngOnInit() {
-    let temp:string|null;
-    temp=localStorage.getItem('patternCache');
-    if(temp != null){
-      this.patterns = JSON.parse(temp);
-    }
-    else{
-      this.stripService.getPatterns().subscribe(res => {
-        this.patterns = res;
-        this.selectedPattern = '';
-      });
-    }
-    temp=localStorage.getItem('decoratorCache');
-    if(temp != null){
-      this.decorators = JSON.parse(temp);
-    }
-    else{
-      this.resetStrip();
-      this.stripService.getDecorators().subscribe(res => {
-        this.decorators = res;
-        this.selectedDecorator = '';
-      });
-    } 
-    this.selectedPattern=localStorage.getItem('selectedPattern');
-    this.selectedDecorator=localStorage.getItem('selectedDecorator');
+    this.resetStrip();
+    this.stripService.getPatterns().subscribe(res => {
+      this.patterns = res;
+      this.selectedPattern = '';
+      this.selectedPattern=localStorage.getItem('selectedPattern') || '';
+      //if(this.patterns[this.selectedPattern]?.continuous) {
+        this.startNewSubscription();
+      //}
+    });
+    this.stripService.getDecorators().subscribe(res => {
+      this.decorators = res;
+      this.selectedDecorator = '';
+      this.selectedDecorator=localStorage.getItem('selectedDecorator') || '';
+    });
+    
+    this.selectedPattern=localStorage.getItem('selectedPattern') || '';
+    this.selectedDecorator=localStorage.getItem('selectedDecorator') || '';
+
   }
 
   resetStrip() {

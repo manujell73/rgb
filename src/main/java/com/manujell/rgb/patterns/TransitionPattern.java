@@ -107,4 +107,9 @@ public class TransitionPattern extends Pattern {
             return Integer.compare(offset, o.offset);
         }
     }
+
+    @Override
+    public boolean isContinuous() {
+        return false;
+    }
 }

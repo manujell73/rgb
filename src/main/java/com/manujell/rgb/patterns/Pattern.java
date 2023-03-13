@@ -15,6 +15,7 @@ public abstract class Pattern {
     public abstract Color[] getCurrentColors();
     public abstract void setColors(List<Color> colors);
     public abstract void applyDecorator(Function<Color, Color> function);
+    public abstract boolean isContinuous();
 
     public int getLength() {
         return length;

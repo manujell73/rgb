@@ -1,12 +1,12 @@
 <div class="colorTest flexDiv"> 
-  <div *ngFor="let color of strip.colors" [ngStyle]="{'background-color': 'rgb('+color.r+', '+color.g+', '+color.b+')', 'width': 'calc(100%/'+strip.length+')'}"></div>
+  <div *ngFor="let color of strip?.colors" [ngStyle]="{'background-color': 'rgb('+color.r+', '+color.g+', '+color.b+')', 'width': 'calc(100%/'+strip?.length+')'}"></div>
 </div>
 
 <select class="input" [(ngModel)]="selectedPattern">
   <option *ngFor="let entry of patterns | keyvalue" value="{{entry.key}}">{{entry.key}}</option>
 </select>
 <div class="flexDiv">
-  <div class="input" *ngFor="let parameter of patterns[selectedPattern||'']">
+  <div class="input" *ngFor="let parameter of patterns[selectedPattern||'']?.parameters">
     {{parameter.name}}
     <br>
     <input *ngIf="parameter.type === 'COLOR'" [(colorPicker)]="parameter.value" [style.background]="parameter.value" (change)="parameterChanged()"/>
@@ -24,7 +24,7 @@
   <option *ngFor="let entry of decorators | keyvalue" value="{{entry.key}}">{{entry.key}}</option>
 </select>
 <div class="flexDiv">
-  <div class="input" *ngFor="let parameter of decorators[selectedDecorator||'']">
+  <div class="input" *ngFor="let parameter of decorators[selectedDecorator||'']?.parameters">
     {{parameter.name}}
     <br>
     <input *ngIf="parameter.type === 'COLOR'" [(colorPicker)]="parameter.value" [style.background]="parameter.value" (change)="parameterChanged()"/>

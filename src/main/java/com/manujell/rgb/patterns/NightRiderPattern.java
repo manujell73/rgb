@@ -79,4 +79,9 @@ public class NightRiderPattern extends SingleColorPattern {
 
         return PatternUtils.calcIndex(0, offset, getLength());
     }
+
+    @Override
+    public boolean isContinuous() {
+        return true;
+    }
 }

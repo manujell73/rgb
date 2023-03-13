@@ -84,6 +84,7 @@ public class RgbTableService {
                     for (int i = 0; i < rgb.getLedsCount(); i++) {
                         rgb.setPixel(i, new com.github.mbelling.ws281x.Color(colors[i].getRGB()));
                     }
+
                     rgb.render();
                     //    System.out.println(Arrays.stream(colors).mapToInt(Color::getRGB).map(a->a&((2<<24)-1)).mapToObj(a->String.format("%6x", a)).collect(Collectors.joining(" - ")));
                     try {

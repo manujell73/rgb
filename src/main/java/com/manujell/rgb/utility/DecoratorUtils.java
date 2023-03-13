@@ -7,6 +7,7 @@ import com.manujell.rgb.color.decorators.TransitionDecorator;
 import com.manujell.rgb.parameter.Parameter;
 
 import java.awt.*;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
@@ -46,7 +47,7 @@ public class DecoratorUtils {
     }
 
     // Please don't ask why
-    public static Parameter[] getParametersOfDecorator(int decoratorCode){
+    public static List<Parameter> getParametersOfDecorator(int decoratorCode){
         Class<? extends ColorDecorator> decoratorClass = colorDecorators.get(decoratorCode);
         if(decoratorClass == BreathingDecorator.class) {
             return BreathingDecorator.getParameters();
@@ -57,7 +58,7 @@ public class DecoratorUtils {
         else if(decoratorClass == TransitionDecorator.class) {
             return TransitionDecorator.getParameters();
         }
-        return new Parameter[0];
+        return Collections.emptyList();
     }
 
     public static Class<? extends ColorDecorator> getDecoratorByName(String name) {

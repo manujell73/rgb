@@ -7,6 +7,7 @@ import com.manujell.rgb.parameter.Parameter;
 import com.manujell.rgb.utility.PatternUtils;
 
 import java.awt.Color;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
@@ -57,15 +58,13 @@ public class NightRiderPattern extends SingleColorPattern {
         color = function.apply(color);
     }
 
-    public static Parameter[] getParameters() {
-        Parameter[] parameters = new Parameter[4];
-
-        parameters[0] = new ColorParameter("NightRiderColor", "Color");
-        parameters[1] = new IntegerParameter("NightRiderSpeed", "Speed", 1, Integer.MAX_VALUE);
-        parameters[2] = new IntegerParameter("NightRiderLength", "Line-length", 1, Integer.MAX_VALUE);
-        parameters[3] = new EnumParameter("NightRiderDirection", "Direction", "Forwards", "Backwards");
-
-        return parameters;
+    public static List<Parameter> getParameters() {
+        return Arrays.asList(
+                new ColorParameter("NightRiderColor", "Color"),
+                new IntegerParameter("NightRiderSpeed", "Speed", 1, Integer.MAX_VALUE),
+                new IntegerParameter("NightRiderLength", "Line-length", 1, Integer.MAX_VALUE),
+                new EnumParameter("NightRiderDirection", "Direction", "Forwards", "Backwards")
+        );
     }
 
     private int calcCurrentLocation() {

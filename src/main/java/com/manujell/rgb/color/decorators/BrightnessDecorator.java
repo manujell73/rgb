@@ -4,7 +4,9 @@ import com.manujell.rgb.parameter.Parameter;
 import com.manujell.rgb.parameter.PercentParameter;
 import com.manujell.rgb.utility.DecoratorUtils;
 
-import java.awt.*;
+import java.awt.Color;
+import java.util.Collections;
+import java.util.List;
 
 public class BrightnessDecorator extends Color implements ColorDecorator {
     private final static String ID_PREFIX = "brightness.parameter.";
@@ -22,11 +24,7 @@ public class BrightnessDecorator extends Color implements ColorDecorator {
         return DecoratorUtils.calcRGB(next.getRGB(), opacity/100f);
     }
 
-    public static Parameter[] getParameters() {
-        Parameter[] parameters = new Parameter[1];
-
-        parameters[0] = new PercentParameter(ID_PREFIX + "color", "Brightness");
-
-        return parameters;
+    public static List<Parameter> getParameters() {
+        return Collections.singletonList(new PercentParameter(ID_PREFIX + "color", "Brightness"));
     }
 }

@@ -6,12 +6,14 @@ import com.manujell.rgb.parameter.Parameter;
 import com.manujell.rgb.patterns.Pattern;
 import com.manujell.rgb.utility.PatternUtils;
 
+import java.util.List;
+
 public class PatternDTO {
     private final int id;
     private final String name;
-    private final Parameter[] parameters;
+    private final List<Parameter> parameters;
 
-    private PatternDTO(int id, String name, Parameter[] parameters) {
+    private PatternDTO(int id, String name, List<Parameter> parameters) {
         this.id = id;
         this.name = name;
         this.parameters = parameters;
@@ -25,14 +27,14 @@ public class PatternDTO {
         return name;
     }
 
-    public Parameter[] getParameters() {
+    public List<Parameter> getParameters() {
         return parameters;
     }
 
     public static PatternDTO createInstanceFromPattern(Class<? extends Pattern> patternClass) {
         int id = PatternUtils.patterns.indexOf(patternClass);
         String name = patternClass.getSimpleName();
-        Parameter[] parameters = PatternUtils.getParametersOfPattern(id);
+        List<Parameter> parameters = PatternUtils.getParametersOfPattern(id);
 
         // TODO: Continue with whatever this should have been
         // patternClass.method
@@ -43,7 +45,7 @@ public class PatternDTO {
     public static PatternDTO createInstanceFromDecorator(Class<? extends ColorDecorator> decoratorClass) {
         int id = DecoratorUtils.colorDecorators.indexOf(decoratorClass);
         String name = decoratorClass.getSimpleName();
-        Parameter[] parameters = DecoratorUtils.getParametersOfDecorator(id);
+        List<Parameter> parameters = DecoratorUtils.getParametersOfDecorator(id);
 
         return new PatternDTO(id, name, parameters);
     }

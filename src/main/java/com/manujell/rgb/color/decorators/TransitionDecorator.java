@@ -5,7 +5,9 @@ import com.manujell.rgb.parameter.IntegerParameter;
 import com.manujell.rgb.parameter.Parameter;
 import com.manujell.rgb.utility.DecoratorUtils;
 
-import java.awt.*;
+import java.awt.Color;
+import java.util.Arrays;
+import java.util.List;
 
 public class TransitionDecorator extends Color implements ColorDecorator {
     private final static String ID_PREFIX = "transition.parameter.";
@@ -23,13 +25,11 @@ public class TransitionDecorator extends Color implements ColorDecorator {
         this.anchor = System.currentTimeMillis();
     }
 
-    public static Parameter[] getParameters() {
-        Parameter[] parameters = new Parameter[2];
-
-        parameters[0] = new ColorParameter(ID_PREFIX + "color", "Color");
-        parameters[1] = new IntegerParameter(ID_PREFIX + "speed", "Speed", 1, Integer.MAX_VALUE);
-
-        return parameters;
+    public static List<Parameter> getParameters() {
+        return Arrays.asList(
+                new ColorParameter(ID_PREFIX + "color", "Color"),
+                new IntegerParameter(ID_PREFIX + "speed", "Speed", 1, Integer.MAX_VALUE)
+        );
     }
 
     @Override

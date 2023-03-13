@@ -5,6 +5,7 @@ import com.manujell.rgb.parameter.IntegerParameter;
 import com.manujell.rgb.parameter.Parameter;
 import com.manujell.rgb.utility.PatternUtils;
 
+import java.util.Arrays;
 import java.util.function.Function;
 
 import java.awt.*;
@@ -57,15 +58,14 @@ public class TransitionPattern extends Pattern {
         colorPairs.forEach(pair -> pair.color = function.apply(pair.color));
     }
 
-    public static Parameter[] getParameters() {
-        Parameter[] parameters = new Parameter[4];
+    public static List<Parameter> getParameters() {
 
-        parameters[0] = new ColorParameter("TransitionColor1", "Color 1");
-        parameters[1] = new IntegerParameter("TransitionOffset1", "Offset 1", 0, Integer.MAX_VALUE);
-        parameters[2] = new ColorParameter("TransitionColor2", "Color 2");
-        parameters[3] = new IntegerParameter("TransitionOffset2", "Offset 2", 0, Integer.MAX_VALUE);
-
-        return parameters;
+        return Arrays.asList(
+                new ColorParameter("TransitionColor1", "Color 1"),
+                new IntegerParameter("TransitionOffset1", "Offset 1", 0, Integer.MAX_VALUE),
+                new ColorParameter("TransitionColor2", "Color 2"),
+                new IntegerParameter("TransitionOffset2", "Offset 2", 0, Integer.MAX_VALUE)
+        );
     }
 
     private Color calcColorAtIndex(int ind, ColorPair pair2, ColorPair pair1) {

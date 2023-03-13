@@ -72,14 +72,12 @@ public class RainDropsPattern extends SingleColorPattern {
         color = function.apply(color);
     }
 
-    public static Parameter[] getParameters() {
-        Parameter[] parameters = new Parameter[3];
-
-        parameters[0] = new ColorParameter("RaindropColor", "Color");
-        parameters[1] = new IntegerParameter("RaindropSpeed", "Drops per Minute", 1, Integer.MAX_VALUE);
-        parameters[2] = new IntegerParameter("RaindropDuration", "Drop duration", 1, Integer.MAX_VALUE);
-
-        return parameters;
+    public static List<Parameter> getParameters() {
+        return Arrays.asList(
+                new ColorParameter("RaindropColor", "Color"),
+                new IntegerParameter("RaindropSpeed", "Drops per Minute", 1, Integer.MAX_VALUE),
+                new IntegerParameter("RaindropDuration", "Drop duration", 1, Integer.MAX_VALUE)
+        );
     }
 
     private void updateRaindrops(long now) {

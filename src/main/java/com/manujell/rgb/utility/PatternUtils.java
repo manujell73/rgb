@@ -4,6 +4,7 @@ import com.manujell.rgb.parameter.Parameter;
 import com.manujell.rgb.patterns.*;
 
 import java.awt.*;
+import java.util.Collections;
 import java.util.List;
 
 public class PatternUtils {
@@ -44,7 +45,7 @@ public class PatternUtils {
     }
 
     // Please don't ask why
-    public static Parameter[] getParametersOfPattern(int patternCode){
+    public static List<Parameter> getParametersOfPattern(int patternCode){
         Class<? extends Pattern> patternClass = patterns.get(patternCode);
         if(patternClass == SingleColorPattern.class) {
             return SingleColorPattern.getParameters();
@@ -58,7 +59,7 @@ public class PatternUtils {
         else if(patternClass == TransitionPattern.class) {
             return TransitionPattern.getParameters();
         }
-        return new Parameter[0];
+        return Collections.emptyList();
     }
 
     public static Class<? extends Pattern> getPatternByName(String name) {

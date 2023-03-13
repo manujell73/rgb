@@ -2,6 +2,8 @@ package com.manujell.rgb.patterns;
 
 import com.manujell.rgb.parameter.ColorParameter;
 import com.manujell.rgb.parameter.Parameter;
+
+import java.util.Collections;
 import java.util.function.Function;
 
 import java.awt.*;
@@ -38,12 +40,8 @@ public class SingleColorPattern extends Pattern {
         color = function.apply(color);
     }
 
-    public static Parameter[] getParameters() {
-        Parameter[] parameters = new Parameter[1];
-
-        parameters[0] = new ColorParameter("SingleColor", "Color");
-
-        return parameters;
+    public static List<Parameter> getParameters() {
+        return Collections.singletonList(new ColorParameter("SingleColor", "Color"));
     }
 
     @Override

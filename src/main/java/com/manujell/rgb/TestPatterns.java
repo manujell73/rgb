@@ -4,7 +4,6 @@ import com.manujell.rgb.patterns.Pattern;
 import com.manujell.rgb.patterns.TransitionPattern;
 
 import java.awt.*;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class TestPatterns {
@@ -16,7 +15,7 @@ public class TestPatterns {
 
         do {
             System.out.println(System.currentTimeMillis() + ": " +
-                    Arrays.stream(pattern.getCurrentColors())
+                    pattern.getColorsWithoutDecorators().stream()
                             .map(color->String.format("%3d %3d %3d", color.getRed(), color.getGreen(), color.getBlue()))
                             .collect(Collectors.joining(" - ")));
         } while(!(pattern instanceof TransitionPattern));

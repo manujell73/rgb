@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Strip } from './strip';
 import { Observable } from 'rxjs';
-import { Parameter, PatternList } from './patternList';
+import { ActiveDecorator, Parameter, PatternList } from './patternList';
 
 @Injectable({
   providedIn: 'root'
@@ -10,16 +10,14 @@ import { Parameter, PatternList } from './patternList';
 export class StripServiceService {
   private stripUrl: string;
   private patternsUrl: string;
-  private setColorUrl: string;
   private decoratorUrl: string;
-  private setDecoratorUrl: string;
+  private activeDecoratorUrl: string;
 
   constructor(private http: HttpClient) {
-    this.stripUrl = 'http://localhost:8080/getStripInfo';
-    this.patternsUrl = 'http://localhost:8080/getPatterns';
-    this.setColorUrl = 'http://localhost:8080/setPattern';
-    this.decoratorUrl = 'http://localhost:8080/getDecorators';
-    this.setDecoratorUrl = 'http://localhost:8080/setDecorator';
+    this.stripUrl = 'http://localhost:8080/stripInfo';
+    this.patternsUrl = 'http://localhost:8080/patterns';
+    this.decoratorUrl = 'http://localhost:8080/decorators';
+    this.activeDecoratorUrl = 'http://localhost:8080/activeDecorators';
   }
 
   public getPatterns(): Observable<PatternList> {
@@ -30,6 +28,14 @@ export class StripServiceService {
     return this.http.get<PatternList>(this.decoratorUrl);
   }
 
+  public getActiveDecorators(): Observable<ActiveDecorator[]> {
+    return this.http.get<ActiveDecorator[]>(this.activeDecoratorUrl);
+  }
+
+  public removeDecorator(index: number): Observable<void> {
+    return this.http.delete<void>(this.activeDecoratorUrl, {params: {index: index}});
+  }
+
   public getStripInfo(): Observable<Strip> {
     return this.http.get<Strip>(this.stripUrl);
   }
@@ -38,15 +44,15 @@ export class StripServiceService {
     let params: HttpParams = new HttpParams()
       .set('patternCode', 0)
       .set('parameters', color);
-    return this.http.post<Strip>(this.setColorUrl, {}, {params: params});
+    return this.http.post<Strip>(this.patternsUrl, {}, {params: params});
   }
 
   public submitPattern(patternList:PatternList, patternName:string): Observable<Strip> {
-    return this.submit(patternList, patternName, this.setColorUrl);
+    return this.submit(patternList, patternName, this.patternsUrl);
   }
 
   public submitDecorator(patternList:PatternList, patternName:string): Observable<Strip> {
-    return this.submit(patternList, patternName, this.setDecoratorUrl);
+    return this.submit(patternList, patternName, this.decoratorUrl);
   }
 
   private submit(patternList:PatternList, patternName:string, requestUrl:string): Observable<Strip> {

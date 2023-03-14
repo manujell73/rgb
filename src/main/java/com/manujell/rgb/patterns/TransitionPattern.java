@@ -1,8 +1,10 @@
 package com.manujell.rgb.patterns;
 
+import com.manujell.rgb.color.decorators.ColorDecorator;
 import com.manujell.rgb.parameter.ColorParameter;
 import com.manujell.rgb.parameter.IntegerParameter;
 import com.manujell.rgb.parameter.Parameter;
+import com.manujell.rgb.utility.DecoratorUtils;
 import com.manujell.rgb.utility.PatternUtils;
 
 import java.util.Arrays;
@@ -39,11 +41,12 @@ public class TransitionPattern extends Pattern {
     }
 
     @Override
-    public Color[] getCurrentColors() {
-        Color[] colors = new Color[getLength()];
+    public List<Color> getCurrentColors(List<ColorDecorator> decorators) {
+        List<Color> colors = new ArrayList<>();
 
-        for(int i=0; i<colors.length; i++) {
-            colors[i] = calcColorAtIndexNew(i);
+        for(int i=0; i<getLength(); i++) {
+            Color color = calcColorAtIndexNew(i);
+            colors.add(DecoratorUtils.applyDecorators(color, decorators));
         }
         return colors;
     }
@@ -51,11 +54,6 @@ public class TransitionPattern extends Pattern {
     @Override
     public void setColors(List<Color> colors) {
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void applyDecorator(Function<Color, Color> function) {
-        colorPairs.forEach(pair -> pair.color = function.apply(pair.color));
     }
 
     public static List<Parameter> getParameters() {

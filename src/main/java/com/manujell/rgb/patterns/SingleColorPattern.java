@@ -1,7 +1,9 @@
 package com.manujell.rgb.patterns;
 
+import com.manujell.rgb.color.decorators.ColorDecorator;
 import com.manujell.rgb.parameter.ColorParameter;
 import com.manujell.rgb.parameter.Parameter;
+import com.manujell.rgb.utility.DecoratorUtils;
 
 import java.util.Collections;
 import java.util.function.Function;
@@ -19,12 +21,8 @@ public class SingleColorPattern extends Pattern {
     }
 
     @Override
-    public Color[] getCurrentColors() {
-        Color[] colors = new Color[getLength()];
-
-        Arrays.fill(colors, color);
-
-        return colors;
+    public List<Color> getCurrentColors(List<ColorDecorator> decorators) {
+        return Collections.nCopies(getLength(), DecoratorUtils.applyDecorators(color, decorators));
     }
 
     @Override
@@ -33,11 +31,6 @@ public class SingleColorPattern extends Pattern {
             throw new IllegalArgumentException("There must be a color.");
         }
         this.color = colors.get(0);
-    }
-
-    @Override
-    public void applyDecorator(Function<Color, Color> function) {
-        color = function.apply(color);
     }
 
     public static List<Parameter> getParameters() {

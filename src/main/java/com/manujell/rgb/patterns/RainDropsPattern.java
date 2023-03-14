@@ -1,8 +1,10 @@
 package com.manujell.rgb.patterns;
 
+import com.manujell.rgb.color.decorators.ColorDecorator;
 import com.manujell.rgb.parameter.ColorParameter;
 import com.manujell.rgb.parameter.IntegerParameter;
 import com.manujell.rgb.parameter.Parameter;
+import com.manujell.rgb.utility.DecoratorUtils;
 import com.manujell.rgb.utility.PatternUtils;
 
 import java.util.function.Function;
@@ -10,6 +12,8 @@ import java.util.function.Function;
 import java.awt.*;
 import java.util.List;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class RainDropsPattern extends SingleColorPattern {
     private final Map<Integer, Long> rainDrops;
@@ -31,11 +35,12 @@ public class RainDropsPattern extends SingleColorPattern {
     }
 
     @Override
-    public Color[] getCurrentColors() {
+    public List<Color> getCurrentColors(List<ColorDecorator> decorators) {
         long now = System.currentTimeMillis();
         updateRaindrops(now);
+        Color currentColor = DecoratorUtils.applyDecorators(color, decorators);
 
-        Color[] colors = new Color[getLength()];
+        List<Color> colors = PatternUtils.getAllBlackList(getLength());
 
         synchronized (rainDrops) {
             Iterator<Map.Entry<Integer, Long>> iter = rainDrops.entrySet().iterator();
@@ -46,13 +51,7 @@ public class RainDropsPattern extends SingleColorPattern {
                     iter.remove();
                     continue;
                 }
-                colors[entry.getKey()] = PatternUtils.calcColor(color, opacity);
-            }
-        }
-
-        for(int i=0; i<colors.length; i++) {
-            if(colors[i] == null){
-                colors[i] = Color.BLACK;
+                colors.set(entry.getKey(), PatternUtils.calcColor(currentColor, opacity));
             }
         }
 
@@ -65,11 +64,6 @@ public class RainDropsPattern extends SingleColorPattern {
             throw new IllegalArgumentException("There must be a color.");
         }
         this.color = colors.get(0);
-    }
-
-    @Override
-    public void applyDecorator(Function<Color, Color> function) {
-        color = function.apply(color);
     }
 
     public static List<Parameter> getParameters() {

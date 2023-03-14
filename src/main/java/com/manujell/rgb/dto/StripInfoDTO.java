@@ -1,16 +1,20 @@
 package com.manujell.rgb.dto;
 
-import java.util.Arrays;
+import java.awt.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class StripInfoDTO {
     private final int length;
     private final int x;
     private final int y;
-    private final Color[] colors;
+    private final List<ColorDTO> colors;
+    private final boolean isContinuous;
 
-    public StripInfoDTO(java.awt.Color[] colors) {
-        this.colors = Arrays.stream(colors).map(Color::new).toArray(Color[]::new);
-        this.length = this.colors.length;
+    public StripInfoDTO(List<Color> colors, boolean isContinuous) {
+        this.colors = colors.stream().map(ColorDTO::new).collect(Collectors.toList());
+        this.isContinuous = isContinuous;
+        this.length = this.colors.size();
         this.x = this.length;
         this.y = 1;
     }
@@ -27,16 +31,20 @@ public class StripInfoDTO {
         return y;
     }
 
-    public Color[] getColors() {
+    public List<ColorDTO> getColors() {
         return colors;
     }
 
-    private static class Color {
+    public boolean isContinuous() {
+        return isContinuous;
+    }
+
+    private static class ColorDTO {
         private final int r;
         private final int g;
         private final int b;
 
-        public Color(java.awt.Color color) {
+        public ColorDTO(Color color) {
             this.r = color.getRed();
             this.g = color.getGreen();
             this.b = color.getBlue();

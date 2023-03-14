@@ -1,5 +1,6 @@
 package com.manujell.rgb.color.decorators;
 
+import com.manujell.rgb.dto.ActiveDecoratorDTO;
 import com.manujell.rgb.parameter.ColorParameter;
 import com.manujell.rgb.parameter.IntegerParameter;
 import com.manujell.rgb.parameter.Parameter;
@@ -8,19 +9,17 @@ import com.manujell.rgb.utility.DecoratorUtils;
 import java.awt.Color;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
-public class TransitionDecorator extends Color implements ColorDecorator {
+public class TransitionDecorator extends ColorDecorator {
     private final static String ID_PREFIX = "transition.parameter.";
 
-    private final Color color1;
-    private final Color color2;
-    private final long speed;
+    private final Color color;
     private final long anchor;
+    protected final long speed;
 
-    public TransitionDecorator(Color color1, Color color2, long speed) {
-        super(color1.getRGB());
-        this.color1 = color1;
-        this.color2 = color2;
+    public TransitionDecorator(Color color, long speed) {
+        this.color = color;
         this.speed = speed;
         this.anchor = System.currentTimeMillis();
     }
@@ -33,9 +32,9 @@ public class TransitionDecorator extends Color implements ColorDecorator {
     }
 
     @Override
-    public int getRGB() {
+    public Color calcNewColor(Color color) {
         float opacity = getOpacityUpdateAnchor(System.currentTimeMillis());
-        return DecoratorUtils.calcRGBTransition(color1.getRGB(), color2.getRGB(), opacity);
+        return DecoratorUtils.calcRGBTransition(color, this.color, opacity);
     }
 
     private float getOpacityUpdateAnchor(long now) {
@@ -44,5 +43,20 @@ public class TransitionDecorator extends Color implements ColorDecorator {
 
         float a = (float) Math.cos(Math.PI * diff/periodLength);
         return a*a;
+    }
+
+    @Override
+    public Function<Color, ColorDecorator> getDecoratorFunction() {
+        return color -> new TransitionDecorator(color, speed);
+    }
+
+    @Override
+    public ActiveDecoratorDTO mapToDTO() {
+        return new ActiveDecoratorDTO(TransitionDecorator.class.getSimpleName(), Arrays.asList(color.getRGB(), speed));
+    }
+
+    @Override
+    public boolean isContinuous() {
+        return true;
     }
 }

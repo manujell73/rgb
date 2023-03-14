@@ -35,3 +35,7 @@
   </div>
 </div>
 <input class="input" type="button" value="Submit" (click)="submitDecorator()"/>
+
+<div>
+  <div *ngFor="let decorator of activeDecorators; let i = index"> <a>{{decorator.name}}</a> <a type="button" (click)="removeDecorator(i)">X</a></div>
+</div>

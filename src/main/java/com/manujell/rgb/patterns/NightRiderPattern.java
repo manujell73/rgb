@@ -1,15 +1,15 @@
 package com.manujell.rgb.patterns;
 
+import com.manujell.rgb.color.decorators.ColorDecorator;
 import com.manujell.rgb.parameter.ColorParameter;
 import com.manujell.rgb.parameter.EnumParameter;
 import com.manujell.rgb.parameter.IntegerParameter;
 import com.manujell.rgb.parameter.Parameter;
 import com.manujell.rgb.utility.PatternUtils;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
 public class NightRiderPattern extends SingleColorPattern {
     private final int speed; // Umdrehungen / Minute
@@ -26,20 +26,14 @@ public class NightRiderPattern extends SingleColorPattern {
     }
 
     @Override
-    public Color[] getCurrentColors() {
-        Color[] colors = new Color[getLength()];
+    public List<Color> getCurrentColors(List<ColorDecorator> decorators) {
+        List<Color> colors = PatternUtils.getAllBlackList(getLength());
         int ind = calcCurrentLocation();
 
         for(int i=0; i<lineLength; i++) {
             float opacity = (lineLength - i) / (float) lineLength;
             int subInd = PatternUtils.calcIndex(ind, dir > 0 ? i : -i, getLength());
-            colors[subInd] = PatternUtils.calcColor(color, opacity);
-        }
-
-        for(int i=0; i<colors.length; i++) {
-            if(colors[i] == null){
-                colors[i] = Color.BLACK;
-            }
+            colors.set(subInd, PatternUtils.calcColor(color, opacity));
         }
 
         return colors;
@@ -51,11 +45,6 @@ public class NightRiderPattern extends SingleColorPattern {
             throw new IllegalArgumentException("There must be a color.");
         }
         this.color = colors.get(0);
-    }
-
-    @Override
-    public void applyDecorator(Function<Color, Color> function) {
-        color = function.apply(color);
     }
 
     public static List<Parameter> getParameters() {

@@ -14,6 +14,10 @@ export class Parameter {
 
 export class Pattern {
     id!: number;
-    continuous?: boolean | undefined;
     parameters!: Parameter[];
+}
+
+export class ActiveDecorator {
+    name!: string;
+    values!: number[]
 }

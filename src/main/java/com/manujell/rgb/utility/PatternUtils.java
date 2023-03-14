@@ -6,6 +6,8 @@ import com.manujell.rgb.patterns.*;
 import java.awt.*;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PatternUtils {
     public static final List<Class<? extends Pattern>> patterns = List.of(SingleColorPattern.class, RainDropsPattern.class, NightRiderPattern.class, TransitionPattern.class);
@@ -26,6 +28,19 @@ public class PatternUtils {
 
     public static int calcIndex(int ind, int offset, int arrayLength) {
         return (((ind + offset) % arrayLength) + arrayLength) % arrayLength;    // Please don't ask
+    }
+
+    public static List<Color> getAllBlackList(int length) {
+        return Stream.generate(() -> Color.BLACK)
+                .limit(length)
+                .collect(Collectors.toList());
+    }
+
+    public static Class<? extends Pattern> getPatternByName(String name) {
+        return patterns.stream()
+                .filter(pattern -> pattern.getSimpleName().equals(name))
+                .findAny()
+                .orElseThrow(IllegalArgumentException::new);
     }
 
     public static Pattern getInstance(Class<? extends Pattern> clazz, int length, List<Integer> parameters) {
@@ -60,12 +75,5 @@ public class PatternUtils {
             return TransitionPattern.getParameters();
         }
         return Collections.emptyList();
-    }
-
-    public static Class<? extends Pattern> getPatternByName(String name) {
-        return patterns.stream()
-                .filter(pattern -> pattern.getSimpleName().equals(name))
-                .findAny()
-                .orElseThrow(IllegalArgumentException::new);
     }
 }

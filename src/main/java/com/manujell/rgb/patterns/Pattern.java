@@ -1,9 +1,10 @@
 package com.manujell.rgb.patterns;
 
+import com.manujell.rgb.color.decorators.ColorDecorator;
 
 import java.awt.*;
+import java.util.Collections;
 import java.util.List;
-import java.util.function.Function;
 
 public abstract class Pattern {
     private int length;
@@ -12,9 +13,8 @@ public abstract class Pattern {
         this.length = length;
     }
 
-    public abstract Color[] getCurrentColors();
+    public abstract List<Color> getCurrentColors(List<ColorDecorator> decorators);
     public abstract void setColors(List<Color> colors);
-    public abstract void applyDecorator(Function<Color, Color> function);
     public abstract boolean isContinuous();
 
     public int getLength() {
@@ -23,5 +23,9 @@ public abstract class Pattern {
 
     public void setLength(int length) {
         this.length = length;
+    }
+
+    public List<Color> getColorsWithoutDecorators() {
+        return getCurrentColors(Collections.emptyList());
     }
 }

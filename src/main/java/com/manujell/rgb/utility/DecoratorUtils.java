@@ -14,36 +14,43 @@ import java.util.function.Function;
 public class DecoratorUtils {
     public static final List<Class<? extends ColorDecorator>> colorDecorators = List.of(BreathingDecorator.class, BrightnessDecorator.class, TransitionDecorator.class);
 
-    public static int calcRGB(int rgb, float opacity) {
-        int red = Math.round(((rgb>>16) & 255) * opacity);
-        int green = Math.round(((rgb>>8) & 255) * opacity);
-        int blue = Math.round((rgb & 255) * opacity);
-        return (red << 16) | (green << 8) | blue;
+    public static Color calcColor(Color color, float opacity) {
+        int red = Math.round(color.getRed() * opacity);
+        int green = Math.round(color.getGreen() * opacity);
+        int blue = Math.round(color.getBlue() * opacity);
+        return new Color(red, green, blue);
     }
 
-    public static int calcRGBTransition(int rgb1, int rgb2, float opacity) {
-        int red = Math.round(((rgb1>>16) & 255) * opacity);
-        int green = Math.round(((rgb1>>8) & 255) * opacity);
-        int blue = Math.round((rgb1 & 255) * opacity);
+    public static Color calcRGBTransition(Color color1, Color color2, float opacity) {
+        Color c1 = calcColor(color1, opacity);
+        Color c2 = calcColor(color2, 1-opacity);
+        int red = c1.getRed() + c2.getRed();
+        int green = c1.getGreen() + c2.getGreen();
+        int blue = c1.getBlue() + c2.getBlue();
 
-        red += Math.round(((rgb2>>16) & 255) * (1-opacity));
-        green += Math.round(((rgb2>>8) & 255) * (1-opacity));
-        blue += Math.round((rgb2 & 255) * (1-opacity));
-
-        return (red << 16) | (green << 8) | blue;
+        return new Color(red, green, blue);
     }
 
-    public static Function<Color, Color> getDecoratorFunction(Class<? extends ColorDecorator> clazz, List<Integer> parameter) {
+    public static ColorDecorator getDecoratorInstance(Class<? extends ColorDecorator> clazz, List<Integer> parameter) {
         if(clazz == BreathingDecorator.class) {
-            return color -> new BreathingDecorator(color, parameter.get(0));
+            checkExpectedParameterLength(parameter, 1);
+            return new BreathingDecorator(parameter.get(0));
         }
         if(clazz == BrightnessDecorator.class){
-            return color -> new BrightnessDecorator(color, parameter.get(0));
+            checkExpectedParameterLength(parameter, 1);
+            return new BrightnessDecorator(parameter.get(0));
         }
         if(clazz == TransitionDecorator.class){
-            return color -> new TransitionDecorator(color, new Color(parameter.get(0)), parameter.get(1));
+            checkExpectedParameterLength(parameter, 2);
+            return new TransitionDecorator(new Color(parameter.get(0)), parameter.get(1));
         }
-        return color -> color;
+        throw new IllegalArgumentException("Unsupported ColorDecorator class: " + clazz.getSimpleName());
+    }
+
+    private static void checkExpectedParameterLength(List<Integer> parameter, int expectedLength) {
+        if(parameter.size() != expectedLength) {
+            throw new IllegalArgumentException("wrong parameters");
+        }
     }
 
     // Please don't ask why
@@ -59,6 +66,13 @@ public class DecoratorUtils {
             return TransitionDecorator.getParameters();
         }
         return Collections.emptyList();
+    }
+
+    public static Color applyDecorators(Color color, List<ColorDecorator> decorators) {
+        for(ColorDecorator decorator : decorators) {
+            color = decorator.calcNewColor(color);
+        }
+        return color;
     }
 
     public static Class<? extends ColorDecorator> getDecoratorByName(String name) {

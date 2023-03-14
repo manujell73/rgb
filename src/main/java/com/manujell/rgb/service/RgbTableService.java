@@ -13,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.awt.*;
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -22,6 +25,7 @@ public class RgbTableService {
     private static final int REFRESH_TIME = 1000/REFRESH_FREQUENCY;
     public int stripLength = 64;
     private Pattern ledPattern;
+    private List<ColorDecorator> activeDecorators;
     private Thread thread;
 
     @Autowired
@@ -29,6 +33,7 @@ public class RgbTableService {
 
     public RgbTableService() {
         ledPattern = PatternUtils.getInstance(SingleColorPattern.class, stripLength, List.of(Color.BLACK.getRGB()));
+        activeDecorators = new ArrayList<>();
     }
 
     @PostConstruct
@@ -46,10 +51,6 @@ public class RgbTableService {
         thread = startLedStrip();
     }
 
-    public Pattern getLedPattern() {
-        return ledPattern;
-    }
-
     public void setLedPattern(Class<? extends Pattern> patternClass, List<Integer> parameters) {
         setLedPattern(PatternUtils.getInstance(patternClass, stripLength, parameters));
     }
@@ -60,7 +61,12 @@ public class RgbTableService {
     }
 
     public void addColorDecorator(Class<? extends ColorDecorator> decoratorClass, List<Integer> parameter) {
-        ledPattern.applyDecorator(DecoratorUtils.getDecoratorFunction(decoratorClass, parameter));
+        ColorDecorator decorator = DecoratorUtils.getDecoratorInstance(decoratorClass, parameter);
+        activeDecorators.add(decorator);
+    }
+
+    private List<Color> calculateCurrentColors() {
+        return ledPattern.getCurrentColors(activeDecorators);
     }
 
     public RgbTableService(Pattern ledPattern) {
@@ -68,7 +74,19 @@ public class RgbTableService {
     }
 
     public StripInfoDTO getStripInfo() {
-        return new StripInfoDTO(getLedPattern().getCurrentColors());
+        boolean isContinuous = ledPattern.isContinuous() || activeDecorators.stream().anyMatch(ColorDecorator::isContinuous);
+        return new StripInfoDTO(calculateCurrentColors(), isContinuous);
+    }
+
+    public List<ColorDecorator> getActiveDecorators() {
+        return Collections.unmodifiableList(activeDecorators);
+    }
+
+    public void removeDecorator(int index) {
+        if(index < 0 || index >= activeDecorators.size()) {
+            throw new IllegalArgumentException();
+        }
+        activeDecorators.remove(index);
     }
 
     private Thread startLedStrip() {
@@ -80,9 +98,9 @@ public class RgbTableService {
                 Ws281xLedStrip rgb = new Ws281xLedStrip(stripLength, 10, 800000, 10, 4, 0, false, LedStripType.WS2811_STRIP_GRB, true);
                 while (true) {
                     long start = (System.currentTimeMillis() / REFRESH_TIME) * REFRESH_TIME;
-                    Color[] colors = getLedPattern().getCurrentColors();
+                    List<Color> colors = calculateCurrentColors();
                     for (int i = 0; i < rgb.getLedsCount(); i++) {
-                        rgb.setPixel(i, new com.github.mbelling.ws281x.Color(colors[i].getRGB()));
+                        rgb.setPixel(i, new com.github.mbelling.ws281x.Color(colors.get(i).getRGB()));
                     }
 
                     rgb.render();
@@ -95,9 +113,9 @@ public class RgbTableService {
                 }
             }
             catch (Exception e){
-                while(true){
-                    getLedPattern().getCurrentColors();
-                }
+                //while(true){
+                //    calculateCurrentColors();
+                //}
             }
         });
         thread.start();

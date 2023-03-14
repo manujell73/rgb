@@ -3,6 +3,7 @@ export class Strip {
     x!: number;
     y!: number;
     colors!: Color[];
+    continuous!: boolean;
 }
 
 export class Color {

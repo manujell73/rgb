@@ -7,13 +7,9 @@ import com.manujell.rgb.parameter.Parameter;
 import com.manujell.rgb.utility.DecoratorUtils;
 import com.manujell.rgb.utility.PatternUtils;
 
-import java.util.function.Function;
-
 import java.awt.*;
 import java.util.List;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class RainDropsPattern extends SingleColorPattern {
     private final Map<Integer, Long> rainDrops;

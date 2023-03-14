@@ -6,10 +6,8 @@ import com.manujell.rgb.parameter.Parameter;
 import com.manujell.rgb.utility.DecoratorUtils;
 
 import java.util.Collections;
-import java.util.function.Function;
 
 import java.awt.*;
-import java.util.Arrays;
 import java.util.List;
 
 public class SingleColorPattern extends Pattern {

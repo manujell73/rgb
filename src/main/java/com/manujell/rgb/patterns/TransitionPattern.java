@@ -8,7 +8,6 @@ import com.manujell.rgb.utility.DecoratorUtils;
 import com.manujell.rgb.utility.PatternUtils;
 
 import java.util.Arrays;
-import java.util.function.Function;
 
 import java.awt.*;
 import java.util.ArrayList;

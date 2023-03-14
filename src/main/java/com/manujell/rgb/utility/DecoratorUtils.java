@@ -9,7 +9,6 @@ import com.manujell.rgb.parameter.Parameter;
 import java.awt.*;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Function;
 
 public class DecoratorUtils {
     public static final List<Class<? extends ColorDecorator>> colorDecorators = List.of(BreathingDecorator.class, BrightnessDecorator.class, TransitionDecorator.class);

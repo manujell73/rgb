@@ -59,6 +59,9 @@ export class AppComponent {
       if(!this.strip?.continuous && result.continuous) {
         this.startNewSubscription();
       }
+      else if(this.strip?.continuous && !result.continuous) {
+        this.subscription?.unsubscribe();
+      }
       this.strip = result;
     });
   }
